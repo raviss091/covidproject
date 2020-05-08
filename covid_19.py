@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import csv
 import datetime
+import xlrd
 import matplotlib.pyplot  as plt
 
 #below is biggest and important function for extraction from web and storing in csv
@@ -52,7 +53,8 @@ def HIGH_RISK_TRAVEL_AREA(m):
 # 3 attempting first question
     c=1
     resource()
-    df=pd.read_csv("C:\\Users\\Ravi shankar sharma\\OneDrive\\Desktop\\covid 19\\covid_global.csv")
+    df=pd.read_csv('C:\\Users\\Ravi shankar sharma\\OneDrive\\Desktop\\covid 19\\covid_global.csv',index_col=0,skiprows=1,names=['Date', 'Country','Confirmed', 'Recoverd', 'Deaths'])
+    
     print(df)
 
 # for parsing  the whole data i think
@@ -79,12 +81,40 @@ def HIGH_RISK_TRAVEL_AREA(m):
    
 #4 attempting second qustion
 def HIGH_RISK_age_group(n):
-    
-    print("\n Table for  number of death in rannge of age 15-25 in differnet countries\n")
-    
-    fp="C:\\Users\\Ravi shankar sharma\\OneDrive\\Desktop\\covid 19\\cov_dat.csv" 
-    mc=pd.read_csv("C:\\Users\\Ravi shankar sharma\\OneDrive\\Desktop\\covid 19\\cov_dat.csv")
-    print(mc)
+    print("\npress 1 for global data and 2 for american cities after this query\n")
+    x=int(input("stastics global or american for  risk of age group"))
+    if(x==1):
+        print("\n Table for  number of death in rannge of age 15-25 in differnet countries\n")
+        
+        fp="C:\\Users\\Ravi shankar sharma\\OneDrive\\Desktop\\covid 19\\cov_dat.csv" 
+        mc=pd.read_csv("C:\\Users\\Ravi shankar sharma\\OneDrive\\Desktop\\covid 19\\cov_dat.csv")
+        print(mc)
+    elif(x!=1):
+        loc="C:\\Users\\Ravi shankar sharma\Downloads\\americanstates (1).xlsx"
+        wb=xlrd.open_workbook(loc)
+        sheet=wb.sheet_by_index(0)
+        print("These are the states where you must be likeing to to study")
+        print(sheet.col_values(0))
+        r=sheet.nrows
+        c=sheet.ncols
+        n=int(input("Enter the number which has been asigned to the state where you want to study. "))
+        print("These are the details of deaths of the selected state")
+        for i in range (1,c):
+            print("Deaths in" ,sheet.cell_value(0,i),"years age gaps are",sheet.cell_value(n,i))
+        print("This is the graph of age vs death of the selected state")
+        x=[sheet.cell_value(0,i) for i in range (1,c)]
+        y=[sheet.cell_value(n,i) for i in range (1,c)]
+        fig = plt.figure(figsize = (10, 5)) 
+        plt.bar(x, y, color ='red',width = 0.4) 
+        plt.plot(x,y)
+        plt.xlabel('age gaps')
+        plt.ylabel('deaths')
+        plt.title('Selected state age vs death graph')
+        plt.show()
+        print ("Now here is the list of top 10 states acording to the deaths in USA")
+        for i in range (1,16):
+            print(sheet.cell_value(i,0))
+        
 
 # attempting third question
      
