@@ -84,7 +84,7 @@ def HIGH_RISK_TRAVEL_AREA(m):
         print(" top 20 countries in death rate")
         for column in df[['date']]:
         
-            print(df.date)
+            
     
             newdf=df.loc[df['death']/df['confirm']>0.04]    
             print(newdf.country.drop_duplicates().head(20))  #half of question 1 is done
