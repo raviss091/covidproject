@@ -43,41 +43,65 @@ def resource():
             
                 writer.writerow(row)
     
-   # with open('mycsvfile.csv', 'a') as f: 
-    #    wri = csv.writer(f)
      
             
-                
+''' function for first question'''          
 def HIGH_RISK_TRAVEL_AREA(m):
     
 # 3 attempting first question
-    c=1
-    resource()
-    df=pd.read_csv('C:\\Users\\Ravi shankar sharma\\OneDrive\\Desktop\\covid 19\\covid_global.csv',index_col=0,skiprows=1,names=['Date', 'Country','Confirmed', 'Recoverd', 'Deaths'])
+    x=int(input("enter your choice\n1.latest data(from web sites)(may not work due to websites issues)\n2,saved data(recommended)"))
+    if(x==1):
+        c=1
+        resource()
+        df=pd.read_csv('C:\\Users\\Ravi shankar sharma\\OneDrive\\Desktop\\covid 19\\covid_global.csv',index_col=0,skiprows=1,names=['Date', 'Country','Confirmed', 'Recoverd', 'Deaths'])
+        
+        print(df)
     
-    print(df)
-
-# for parsing  the whole data i think
-
-    df.date = pd.to_datetime(df.date, format="%Y-%m-%d")
+    # for parsing  the whole data i think
     
-
-    for column in df[['date']]:
-    # if(df.loc[df['death']==0]='True')=='True':  wrong item but still useful
-        print(df.date)
-
-        newdf=df.loc[df['death']/df['confirm']>0.04]    
-        print(newdf.country.drop_duplicates().head(50))  #half of question 1 is done
+        df.date = pd.to_datetime(df.date, format="%Y-%m-%d")
+        
+    
+        for column in df[['date']]:
+        # if(df.loc[df['death']==0]='True')=='True':  wrong item but still useful
+            print(df.date)
+    
+            newdf=df.loc[df['death']/df['confirm']>0.04]    
+            print(newdf.country.drop_duplicates().head(50))  #half of question 1 is done
+           
+            co=input("enter the name of the country")    #for grapghing purpose
+            mdf=df.loc[df['country']==co]
+            print(mdf)
        
-        co=input("enter the name of the country")    #for grapghing purpose
-        mdf=df.loc[df['country']==co]
-        print(mdf)
-   
-    plt.plot(mdf['date'],mdf['death'])
-    return 1
+        plt.plot(mdf['date'],mdf['death'])
+    else:
+        print("\n\nyou may encounter some garbage in this method sorry!!!")
+        path="C:\\Users\\Ravi shankar sharma\\OneDrive\\Desktop\\covid 19\\offline.csv"
+        df=pd.read_csv(path,error_bad_lines=False)
+        print(df)
+        df.date = pd.to_datetime(df.date, format="%Y-%m-%d")
+        
+        print(" top 20 countries in death rate")
+        for column in df[['date']]:
+        
+            print(df.date)
+    
+            newdf=df.loc[df['death']/df['confirm']>0.04]    
+            print(newdf.country.drop_duplicates().head(20))  #half of question 1 is done
+           
+            co=input("enter the name of the country")    #for grapghing purpose
+            mdf=df.loc[df['country']==co]
+            print(mdf)
+             
+            plt.plot(mdf['date'],mdf['death'])
+            plt.xlabel('Time(date)')
+            plt.ylabel('deaths')
+            plt.show()
+            print(co +" death rate graph")
+        
     
    
-   
+''' function for second question'''  
    
 #4 attempting second qustion
 def HIGH_RISK_age_group(n):
@@ -105,17 +129,17 @@ def HIGH_RISK_age_group(n):
         x=[sheet.cell_value(0,i) for i in range (1,c)]
         y=[sheet.cell_value(n,i) for i in range (1,c)]
         fig = plt.figure(figsize = (10, 5)) 
-        plt.bar(x, y, color ='red',width = 0.4) 
         plt.plot(x,y)
         plt.xlabel('age gaps')
         plt.ylabel('deaths')
-        plt.title('Selected state age vs death graph')
+        plt.title(' state age vs death graph')
         plt.show()
-        print ("Now here is the list of top 10 states acording to the deaths in USA")
+        print (" list of top 10 states acording for the deaths in USA")
         for i in range (1,16):
             print(sheet.cell_value(i,0))
         
 
+''' function for third question'''  
 # attempting third question
      
 def avg():
@@ -124,13 +148,20 @@ def avg():
     
     to=pd.read_csv("C:\\Users\\Ravi shankar sharma\\OneDrive\\Desktop\\covid 19\\avg_time.csv")
     to['sno'] = to.sno.astype(float)
+    print("country data accesible 1.india 2.us 3.italy 4.france 5.germany 6. britain 7. cannada 8. china 9 .sweden 10. japan")
     to['country'] = to['country'].astype(str)
     for column in to[['sno']]:
-        cot=input("enter country name for data ")
+        cot=input("enter country name for data :")
         mof=to.loc[to['country']==cot]
         print(mof)
+    print("total data compiled")
+    print(to)
+    
+    
+    
 #  main program for covid19
 
+print(" our program is highly reliable as for first part we have used data of 20,0000 line")
 x=int(input("enter your choice \n1.HIGH RISK TRAVEL AREA\n2.HIGH RISK age group\n3.avg timetaken for death and recovery by country:"))
 if(x==1):
     
