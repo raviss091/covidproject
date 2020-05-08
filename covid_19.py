@@ -20,7 +20,7 @@ def resource():
 
     soup = BeautifulSoup(r.content, 'html5lib')
 
-    for mytable in soup.find_all('table','js-csv-data csv-data js-file-line-container'):
+    for mytable in soup.find_all('table'):
         for trs in mytable.find_all('tr'):
             ths=trs.find_all('th')
             tds = trs.find_all('td')
@@ -29,12 +29,12 @@ def resource():
         
 # 2  web scraping and then writing in  covid_global an csv file
         
-        file="C:\\Users\\Ravi shankar sharma\\OneDrive\\Desktop\\covid 19\\covid_global.csv"
+    file="C:\\Users\\Ravi shankar sharma\\OneDrive\\Desktop\\covid 19\\covid_global.csv"
   
     with open(file, 'w') as f:
         writer = csv.writer(f)
         writer.writerow(['s.no','date','country','confirm','recover','death'])
-        for mytable in soup.find_all('table','js-csv-data csv-data js-file-line-container'):
+        for mytable in soup.find_all('table'):
             for trs in mytable.find_all('tr'):
             
                 tds = trs.find_all('td')
@@ -42,7 +42,7 @@ def resource():
             
                 writer.writerow(row)
     
-   # with open('mycsvfile.csv', 'a') as f:
+   # with open('mycsvfile.csv', 'a') as f: 
     #    wri = csv.writer(f)
      
             
@@ -50,7 +50,7 @@ def resource():
 def HIGH_RISK_TRAVEL_AREA(m):
     
 # 3 attempting first question
-  
+    c=1
     resource()
     df=pd.read_csv("C:\\Users\\Ravi shankar sharma\\OneDrive\\Desktop\\covid 19\\covid_global.csv")
     print(df)
