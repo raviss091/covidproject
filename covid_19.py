@@ -11,10 +11,13 @@ import csv
 import datetime
 import xlrd
 import matplotlib.pyplot  as plt
+import os
 
 #below is biggest and important function for extraction from web and storing in csv
 
 # 1 extracting table using beautiful soup
+
+
 def resource():
     url="https://github.com/datasets/covid-19/blob/master/data/countries-aggregated.csv"
     r=requests.get(url)
@@ -30,7 +33,7 @@ def resource():
         
 # 2  web scraping and then writing in  covid_global an csv file
         
-    file="C:\\Users\\Ravi shankar sharma\\OneDrive\\Desktop\\covid 19\\covid_global.csv"
+    file="covid_global.csv"
   
     with open(file, 'w') as f:
         writer = csv.writer(f)
@@ -53,15 +56,14 @@ def HIGH_RISK_TRAVEL_AREA(m):
     if(x==1):
         c=1
         resource()
-        df=pd.read_csv('C:\\Users\\Ravi shankar sharma\\OneDrive\\Desktop\\covid 19\\covid_global.csv',index_col=0,skiprows=1,names=['Date', 'Country','Confirmed', 'Recoverd', 'Deaths'])
+        df=pd.read_csv('covid_global.csv',index_col=0,skiprows=1,names=['Date', 'Country','Confirmed', 'Recoverd', 'Deaths'])
         
         print(df)
     
-    # for parsing  the whole data i think
+        # for parsing  the whole data i think
     
         df.date = pd.to_datetime(df.date, format="%Y-%m-%d")
         
-    
         for column in df[['date']]:
         # if(df.loc[df['death']==0]='True')=='True':  wrong item but still useful
             print(df.date)
@@ -74,30 +76,31 @@ def HIGH_RISK_TRAVEL_AREA(m):
             print(mdf)
        
         plt.plot(mdf['date'],mdf['death'])
+        
     else:
         print("\n\nyou may encounter some garbage in this method sorry!!!")
-        path="C:\\Users\\Ravi shankar sharma\\OneDrive\\Desktop\\covid 19\\offline.csv"
+        path="offline.csv"
         df=pd.read_csv(path,error_bad_lines=False)
         print(df)
         df.date = pd.to_datetime(df.date, format="%Y-%m-%d")
         
-        print(" top 20 countries in death rate")
-        for column in df[['date']]:
+        dead=int(input("enter the death rate tou want to select as a parameter(out of hundred)"))
         
-            
-    
-            newdf=df.loc[df['death']/df['confirm']>0.04]    
-            print(newdf.country.drop_duplicates().head(20))  #half of question 1 is done
-           
-            co=input("enter the name of the country")    #for grapghing purpose
+        print(" top 20 countries in death rate")
+        
+        newdf=df.loc[df['death']/df['confirm']>(dead/100)]    
+        print(newdf.country.drop_duplicates().head(20))  #half of question 1 is done
+        print("These are the countries where you must be likeing to to study or go for a tour :")
+        lis=[" Israel","US","France","Italy","Ukraine","Indonesia","India","China"]
+        for co in lis:
             mdf=df.loc[df['country']==co]
-            print(mdf)
-             
+            fig = plt.figure(figsize = (10,5))
             plt.plot(mdf['date'],mdf['death'])
             plt.xlabel('Time(date)')
             plt.ylabel('deaths')
             plt.show()
-            print(co +" death rate graph")
+            print(" death rate graph of :",co,"\n")
+            
         
     
    
@@ -110,11 +113,11 @@ def HIGH_RISK_age_group(n):
     if(x==1):
         print("\n Table for  number of death in rannge of age 15-25 in differnet countries\n")
         
-        fp="C:\\Users\\Ravi shankar sharma\\OneDrive\\Desktop\\covid 19\\cov_dat.csv" 
-        mc=pd.read_csv("C:\\Users\\Ravi shankar sharma\\OneDrive\\Desktop\\covid 19\\cov_dat.csv")
+        fp="cov_dat.csv" 
+        mc=pd.read_csv("cov_dat.csv")
         print(mc)
     elif(x!=1):
-        loc="C:\\Users\\Ravi shankar sharma\Downloads\\americanstates (1).xlsx"
+        loc="americanstates (1).xlsx"
         wb=xlrd.open_workbook(loc)
         sheet=wb.sheet_by_index(0)
         print("These are the states where you must be likeing to to study")
@@ -146,7 +149,7 @@ def avg():
     
     print("\nAvg timetaken for death and recovery by country\n")
     
-    to=pd.read_csv("C:\\Users\\Ravi shankar sharma\\OneDrive\\Desktop\\covid 19\\avg_time.csv")
+    to=pd.read_csv("avg_time.csv")
     to['sno'] = to.sno.astype(float)
     print("country data accesible 1.india 2.us 3.italy 4.france 5.germany 6. britain 7. cannada 8. china 9 .sweden 10. japan")
     to['country'] = to['country'].astype(str)
@@ -160,9 +163,12 @@ def avg():
     
     
 #  main program for covid19
-
+print("******************************************************************************************")
 print(" our program is highly reliable as for first part we have used data of 20,0000 line")
 x=int(input("enter your choice \n1.HIGH RISK TRAVEL AREA\n2.HIGH RISK age group\n3.avg timetaken for death and recovery by country:"))
+print("\n******************************************************************************************")
+
+os.chdir("C:\\Users\\Ravi shankar sharma\\OneDrive\\Desktop\\covid 19")
 if(x==1):
     
     print("test 1")
@@ -173,6 +179,8 @@ if(x==2):
         
 if(x==3):
     avg()
+    
+
 
 
 
