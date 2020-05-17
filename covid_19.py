@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Apr 10 15:10:32 2020
-
-@author: Ravi shankar sharma
-"""
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -36,14 +30,13 @@ def resource():
     file="covid_global.csv"
   
     with open(file, 'w') as f:
-        writer = csv.writer(f)
-        writer.writerow(['s.no','date','country','confirm','recover','death'])
+        writer = csv.writer(f,delimiter=',',quoting=csv.QUOTE_NONE, escapechar=' ' )
         for mytable in soup.find_all('table'):
             for trs in mytable.find_all('tr'):
             
                 tds = trs.find_all('td')
                 row = [elem.text.strip() for elem in tds]
-            
+                
                 writer.writerow(row)
     
      
@@ -56,26 +49,32 @@ def HIGH_RISK_TRAVEL_AREA(m):
     if(x==1):
         c=1
         resource()
-        df=pd.read_csv('covid_global.csv',index_col=0,skiprows=1,names=['Date', 'Country','Confirmed', 'Recoverd', 'Deaths'])
+        df=pd.read_csv('covid_global.csv',delimiter=",",sep='\t',error_bad_lines=False,index_col=0)
         
         print(df)
+        
+        path="offline.csv"
+        mf=pd.read_csv(path,error_bad_lines=False)
+        dead=int(input("enter the death rate tou want to select as a parameter(out of hundred)"))
+        
+        print(" top 20 countries in death rate")
+        
+        newdf=mf.loc[mf['death']/mf['confirm']>(dead/100)]    
+        print(newdf.country.drop_duplicates().head(20))
     
         # for parsing  the whole data i think
-    
-        df.date = pd.to_datetime(df.date, format="%Y-%m-%d")
-        
-        for column in df[['date']]:
-        # if(df.loc[df['death']==0]='True')=='True':  wrong item but still useful
-            print(df.date)
-    
-            newdf=df.loc[df['death']/df['confirm']>0.04]    
-            print(newdf.country.drop_duplicates().head(50))  #half of question 1 is done
-           
-            co=input("enter the name of the country")    #for grapghing purpose
-            mdf=df.loc[df['country']==co]
-            print(mdf)
+        lis=["Israel ","US ","France ","Italy ","Ukraine ","Indonesia ","India ","China "]
+        for co in lis:
+            mdf=df.loc[df['Country ']==co]
+            fig = plt.figure(figsize = (15,5))
+            plt.plot(mdf['Date '],mdf['Deaths'])
+            plt.xlabel('Time(date)')
+            plt.ylabel('deaths')
+            plt.show()
+            print(" death rate graph of :",co,"\n")
        
-        plt.plot(mdf['date'],mdf['death'])
+    
+       
         
     else:
         print("\n\nyou may encounter some garbage in this method sorry!!!")
@@ -180,30 +179,3 @@ if(x==2):
 if(x==3):
     avg()
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-        
-        
-
-
-      
